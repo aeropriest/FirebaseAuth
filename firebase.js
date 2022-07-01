@@ -1,31 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-//import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: Constants.manifest?.extra?.firebaseApiKey,
-  authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
-  projectId: Constants.manifest?.extra?.firebaseProjectId,
-  storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
-  messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
-  appId: Constants.manifest?.extra?.firebaseAppId,
-};
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(app);
-const auth = firebase.auth();
-export { auth };
-
-/*
-
-// Import the functions you need from the SDKs you need
-//import * as firebase from "firebase";
-import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+import * as firebase from "firebase";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -42,18 +16,19 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-// let app;
+let app;
+if (firebase.apps.length === 0) {
+  app = firebase.initializeApp(firebaseConfig);
+} else {
+  app = firebase.app();
+}
 
-// if (firebase.app.length === 0) {
-//   app = firebase.app.initializeApp(firebaseConfig);
-// } else {
-//   app = firebase.app;
-// }
+export const auth = firebase.auth();
 
-const app = initializeApp(firebaseConfig);
-const auth = firebase.auth();
-export { auth };
+console.log("firebase loaded--------------------------------");
+console.log(firebase);
+console.log("firebase auth--------------------------------");
+console.log(auth);
+//export { auth };
 
-// const analytics = getAnalytics(app);
-
-*/
+//firebase version 8.2.2

@@ -2,20 +2,54 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { KeyboardAvoidingView } from "react-native";
 import styles from "./styles";
-//import auth from "@react-native-firebase/auth";
+//import auth from "../../../firebase";
+
+import * as firebase from "firebase";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBkIUB-TISVtj7Xs5MRHPMSSsA_pCRs6PE",
+  authDomain: "coinwatch-16730.firebaseapp.com",
+  projectId: "coinwatch-16730",
+  storageBucket: "coinwatch-16730.appspot.com",
+  messagingSenderId: "267594157438",
+  appId: "1:267594157438:web:e56ccbec6a8edeea8c372f",
+  measurementId: "G-2EM3QB2BRH",
+};
 
 const LoginScreen = () => {
+  // Initialize Firebase
+  let app;
+  if (firebase.apps.length === 0) {
+    app = firebase.initializeApp(firebaseConfig);
+  } else {
+    app = firebase.app();
+  }
+
+  const auth = firebase.auth();
+
+  console.log("-------LoginScreen--------------------------------");
+  console.log(auth);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = () => {
-    // auth
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then((userCredentials) => {
-    //     const user = userCredentials.user;
-    //     console.log(email, user);
-    //   })
-    //   .catch((error) => console.log(error));
+    console.log("LoginScreen called with password: " + password);
+    console.log(auth);
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log(email, user);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
   };
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -44,7 +78,7 @@ const LoginScreen = () => {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={handleSignUp()}
+          onPress={() => handleSignUp()}
           style={[styles.button, styles.buttonOutline]}
         >
           <Text style={styles.buttonOutlineText}>Register</Text>
