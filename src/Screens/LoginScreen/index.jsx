@@ -1,10 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView } from "react-native";
 import styles from "./styles";
 //import auth from "../../../firebase";
 
 import * as firebase from "firebase";
+//import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/core";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,6 +39,17 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("Home");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   const handleSignUp = () => {
     console.log("LoginScreen called with password: " + password);
     console.log(auth);
@@ -51,6 +64,20 @@ const LoginScreen = () => {
         alert(error);
       });
   };
+
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("logged in with ", user.email);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
@@ -71,7 +98,7 @@ const LoginScreen = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => {
-            console.log("email changed");
+            handleLogin();
           }}
           style={styles.button}
         >
